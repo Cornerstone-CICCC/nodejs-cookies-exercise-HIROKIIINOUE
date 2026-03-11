@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const auth_middleware_1 = require("../middleware/auth.middleware");
 const pageRouter = (0, express_1.Router)();
 const users = [{ username: " admin", password: "admin12345" }];
-pageRouter.get("/", (req, res) => {
+pageRouter.get("/", auth_middleware_1.checkNoAuth, (req, res) => {
     res.status(200).render("index");
 });
-pageRouter.get("/login", (req, res) => {
+pageRouter.get("/login", auth_middleware_1.checkNoAuth, (req, res) => {
     res.status(200).render("login");
 });
 pageRouter.post("/login", (req, res) => {
@@ -28,7 +29,7 @@ pageRouter.post("/login", (req, res) => {
     });
     res.status(301).redirect("/profile");
 });
-pageRouter.get("/profile", (req, res) => {
+pageRouter.get("/profile", auth_middleware_1.checkAuth, (req, res) => {
     const { username } = req.cookies;
     res.status(200).render("profile", {
         username,

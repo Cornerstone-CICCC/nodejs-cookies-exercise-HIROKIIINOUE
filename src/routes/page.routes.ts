@@ -1,14 +1,15 @@
 import { Router, Request, Response } from "express";
+import { checkAuth, checkNoAuth } from "../middleware/auth.middleware";
 
 const pageRouter = Router();
 
 const users = [{ username: " admin", password: "admin12345" }];
 
-pageRouter.get("/", (req, res) => {
+pageRouter.get("/", checkNoAuth, (req, res) => {
   res.status(200).render("index");
 });
 
-pageRouter.get("/login", (req, res) => {
+pageRouter.get("/login", checkNoAuth, (req, res) => {
   res.status(200).render("login");
 });
 
@@ -37,7 +38,7 @@ pageRouter.post("/login", (req, res) => {
   res.status(301).redirect("/profile");
 });
 
-pageRouter.get("/profile", (req, res) => {
+pageRouter.get("/profile", checkAuth, (req, res) => {
   const { username } = req.cookies;
   res.status(200).render("profile", {
     username,
